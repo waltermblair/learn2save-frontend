@@ -1,10 +1,54 @@
+# learn2save
+```mermaid
+graph TD
+front[React front-end]-->back[Go back-end]
+front-->oauth[OAuth]
+front-->redis[redis cache]
+back-->redis
+back-->sql[MySQL]
+```
+
+```mermaid
+sequenceDiagram
+participant user
+participant front as React front-end
+participant back as Go back-end
+participant sql as MySQL
+participant redis as redis cache
+participant auth as OAuth
+user->>front: login
+front->>auth: oauth exchange
+auth-->>front: oauth exchange
+front-->>user: oauth token & session
+front->>redis: session cache
+user->>front: create account
+front->>back: authenticate
+back->>auth: oauth exchange
+auth-->>back: oauth exchange
+back-->>front: oauth token
+front->>back: post accounts
+back->>sql: store account creds
+user->>front: get balance
+front->>back: get accounts/:id
+back->>sql: fetch account
+user->>front: deposit
+front->>back: post accounts/:id
+back->>sql: update account
+user->>front: delete account
+front->>back: delete accounts/:id
+back->>sql: delete account
+user->>front: get transactions
+front->>back: get audits/:user_id
+back->>sql: fetch audit records
+```
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `yarn start`
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
